@@ -81,7 +81,7 @@
                     <version>3.6.3</version>
 
                     <configuration>
-                        <mainClass>com.phuc.tictactoe.App</mainClass>
+                        <mainClass>com.phuc.tictactoe.basic.App</mainClass>
                     </configuration>
                 </plugin>
                 <!-- site lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#site_Lifecycle -->
