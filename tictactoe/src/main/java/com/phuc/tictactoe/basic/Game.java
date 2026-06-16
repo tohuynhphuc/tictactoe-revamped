@@ -47,9 +47,11 @@ public class Game {
             currentPlayerMakeMove();
 
             if (board.checkWin()) {
+                board.display();
                 System.out.println("Player " + currentPlayerId + " wins!");
                 isGameEnd = true;
             } else if (board.isFull()) {
+                board.display();
                 System.out.println("It's a tie!");
                 isGameEnd = true;
             }
