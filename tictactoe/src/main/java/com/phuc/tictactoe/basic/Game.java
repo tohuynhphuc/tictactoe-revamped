@@ -73,6 +73,11 @@ public class Game {
         board.setCell(move, currentPlayerId);
     }
 
+    /**
+     * Gets the current player as an object.
+     * 
+     * @return the current player object
+     */
     private Player getCurrentPlayer() {
         return currentPlayerId == 1 ? playerOne : playerTwo;
     }

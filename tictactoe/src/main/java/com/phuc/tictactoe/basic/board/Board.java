@@ -48,6 +48,12 @@ public class Board {
         return move >= 1 && move <= 9;
     }
 
+    /**
+     * Checks if the cell is empty.
+     * 
+     * @param move the move (1-9)
+     * @return whether the cell is empty
+     */
     public boolean isCellEmpty(int move) {
         return getCell(move) == 0;
     }
