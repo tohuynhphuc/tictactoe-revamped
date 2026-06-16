@@ -48,7 +48,7 @@ public class Game {
 
             if (board.checkWin()) {
                 board.display();
-                System.out.println("Player " + getCurrentPlayer().getName() + " won!");
+                System.out.println("Player#" + currentPlayerId + " won!");
                 isGameEnd = true;
             } else if (board.isFull()) {
                 board.display();
@@ -67,7 +67,7 @@ public class Game {
         Player currentPlayer = getCurrentPlayer();
 
         board.display();
-        System.out.println("Player " + currentPlayer.getName() + "\'s turn.");
+        System.out.println("Player#" + currentPlayerId + "\'s turn");
 
         int move = currentPlayer.makeMove(board);
         board.setCell(move, currentPlayerId);

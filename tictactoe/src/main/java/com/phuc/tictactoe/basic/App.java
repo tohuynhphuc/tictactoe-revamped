@@ -13,7 +13,7 @@ public class App {
 
     public static void main(String[] args) {
         if (!isValidArguments(args)) {
-            System.out.println("Invalid arguments");
+            System.out.println("Please, input a valid option [1-2]");
             return;
         }
 
@@ -23,7 +23,12 @@ public class App {
         Player playerTwo = new Computer("2");
 
         Game game = new Game(processArguments(args), playerOne, playerTwo);
-        game.start();
+
+        Thread gameThread = new Thread(() -> {
+            game.start();
+        });
+
+        gameThread.start();
     }
 
     /**
