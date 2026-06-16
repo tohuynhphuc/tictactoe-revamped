@@ -34,7 +34,7 @@ public class Game {
         welcome();
         startGameLoop();
 
-        System.out.println("Game ends!");
+        // System.out.println("Game ends!");
     }
 
     /**
@@ -48,11 +48,11 @@ public class Game {
 
             if (board.checkWin()) {
                 board.display();
-                System.out.println("Player " + currentPlayerId + " wins!");
+                System.out.println("Player " + getCurrentPlayer().getName() + " won!");
                 isGameEnd = true;
             } else if (board.isFull()) {
                 board.display();
-                System.out.println("It's a tie!");
+                System.out.println("It is a draw!");
                 isGameEnd = true;
             }
 
@@ -64,20 +64,24 @@ public class Game {
      * The current players make a move.
      */
     private void currentPlayerMakeMove() {
-        Player currentPlayer = currentPlayerId == 1 ? playerOne : playerTwo;
+        Player currentPlayer = getCurrentPlayer();
 
         board.display();
-        System.out.println(currentPlayer.getName() + "\s turn: ");
+        System.out.println("Player " + currentPlayer.getName() + "\'s turn.");
 
         int move = currentPlayer.makeMove(board);
         board.setCell(move, currentPlayerId);
+    }
+
+    private Player getCurrentPlayer() {
+        return currentPlayerId == 1 ? playerOne : playerTwo;
     }
 
     /**
      * Prints welcome message.
      */
     private void welcome() {
-        System.out.println("Welcome!");
+        System.out.println("Hello!");
     }
 
     /**

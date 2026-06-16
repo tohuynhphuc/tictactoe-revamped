@@ -22,14 +22,21 @@ public class Human extends Player {
             try {
                 cell = Integer.parseInt(scanner.nextLine());
             } catch (NumberFormatException e) {
-                System.out.println("Invalid move");
+                System.out.println("Please, input a valid number [1-9]");
                 continue;
             }
 
-            isValidMove = board.isValidMove(cell);
-            if (!isValidMove) {
-                System.out.println("Invalid move.");
+            if (!board.isMoveInRange(cell)) {
+                System.out.println("Please, input a valid number [1-9]");
+                continue;
             }
+
+            if (!board.isCellEmpty(cell)) {
+                System.out.println("The cell is occupied!");
+                continue;
+            }
+
+            isValidMove = true;
         }
 
         return cell;

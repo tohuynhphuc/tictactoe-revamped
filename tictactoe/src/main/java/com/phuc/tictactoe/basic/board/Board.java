@@ -35,7 +35,7 @@ public class Board {
      * @return whether the move is valid
      */
     public boolean isValidMove(int move) {
-        return isMoveInRange(move) && getCell(move) == 0;
+        return isMoveInRange(move) && isCellEmpty(move);
     }
 
     /**
@@ -44,8 +44,12 @@ public class Board {
      * @param move the move (1-9)
      * @return whether the move is in the board
      */
-    private boolean isMoveInRange(int move) {
+    public boolean isMoveInRange(int move) {
         return move >= 1 && move <= 9;
+    }
+
+    public boolean isCellEmpty(int move) {
+        return getCell(move) == 0;
     }
 
     /**

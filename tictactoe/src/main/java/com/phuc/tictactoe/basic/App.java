@@ -19,8 +19,8 @@ public class App {
 
         Scanner scanner = new Scanner(System.in);
 
-        Player playerOne = new Human("Player 1", scanner);
-        Player playerTwo = new Computer("Player 2");
+        Player playerOne = new Human("1", scanner);
+        Player playerTwo = new Computer("2");
 
         Game game = new Game(processArguments(args), playerOne, playerTwo);
         game.start();
