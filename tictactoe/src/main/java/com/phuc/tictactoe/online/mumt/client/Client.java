@@ -1,4 +1,4 @@
-package com.phuc.tictactoe.online.sust.client;
+package com.phuc.tictactoe.online.mumt.client;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -6,10 +6,10 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-import com.phuc.tictactoe.online.sust.Constants;
-import com.phuc.tictactoe.online.sust.board.Board;
-import com.phuc.tictactoe.online.sust.protocol.ClientRequest;
-import com.phuc.tictactoe.online.sust.protocol.ServerResponse;
+import com.phuc.tictactoe.online.mumt.Constants;
+import com.phuc.tictactoe.online.mumt.board.Board;
+import com.phuc.tictactoe.online.mumt.protocol.ClientRequest;
+import com.phuc.tictactoe.online.mumt.protocol.ServerResponse;
 
 public class Client {
 
