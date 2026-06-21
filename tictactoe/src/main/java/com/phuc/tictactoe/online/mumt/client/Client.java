@@ -44,20 +44,7 @@ public class Client {
     private static void startRequestResponseLoop(BufferedReader consoleInput, PrintWriter output,
             BufferedReader serverInput, PrintWriter serverOutput) throws IOException {
         while (true) {
-            String request = consoleInput.readLine();
-            request = request == null ? "q" : request;
-
-            int playerMove;
-            if (request.equalsIgnoreCase("q")) {
-                playerMove = -1;
-            } else {
-                try {
-                    playerMove = Integer.parseInt(request);
-                } catch (NumberFormatException e) {
-                    playerMove = -2;
-                }
-            }
-
+            int playerMove = getUserMove(consoleInput);
             ClientRequest clientRequestProtocol = new ClientRequest(playerMove, currentBoard);
             serverOutput.println(clientRequestProtocol);
 
@@ -84,6 +71,23 @@ public class Client {
                 break;
             }
         }
+    }
+
+    private static int getUserMove(BufferedReader consoleInput) throws IOException {
+        String request = consoleInput.readLine();
+        request = request == null ? "q" : request;
+
+        int playerMove;
+        if (request.equalsIgnoreCase("q")) {
+            playerMove = -1;
+        } else {
+            try {
+                playerMove = Integer.parseInt(request);
+            } catch (NumberFormatException e) {
+                playerMove = -2;
+            }
+        }
+        return playerMove;
     }
 
 }

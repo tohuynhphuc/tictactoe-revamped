@@ -36,20 +36,7 @@ public class Client {
                 response = sendMessageAndReceive(initialRequestProtocol);
                 isFirstConnect = false;
             } else {
-                String request = consoleInput.readLine();
-                request = request == null ? "q" : request;
-
-                int playerMove;
-                if (request.equalsIgnoreCase("q")) {
-                    playerMove = -1;
-                } else {
-                    try {
-                        playerMove = Integer.parseInt(request);
-                    } catch (NumberFormatException e) {
-                        playerMove = -2;
-                    }
-                }
-
+                int playerMove = getUserMove(consoleInput);
                 ClientRequest clientRequestProtocol = new ClientRequest(playerMove, currentBoard);
                 response = sendMessageAndReceive(clientRequestProtocol);
             }
@@ -85,6 +72,23 @@ public class Client {
             String response = serverInput.readLine();
             return response;
         }
+    }
+
+    private static int getUserMove(BufferedReader consoleInput) throws IOException {
+        String request = consoleInput.readLine();
+        request = request == null ? "q" : request;
+
+        int playerMove;
+        if (request.equalsIgnoreCase("q")) {
+            playerMove = -1;
+        } else {
+            try {
+                playerMove = Integer.parseInt(request);
+            } catch (NumberFormatException e) {
+                playerMove = -2;
+            }
+        }
+        return playerMove;
     }
 
 }
