@@ -1,8 +1,8 @@
-package com.phuc.tictactoe.basic;
+package com.phuc.tictactoe.online.sust;
 
-import com.phuc.tictactoe.basic.board.Board;
-import com.phuc.tictactoe.basic.exception.GameQuitException;
-import com.phuc.tictactoe.basic.player.Player;
+import com.phuc.tictactoe.online.sust.board.Board;
+import com.phuc.tictactoe.online.sust.exception.GameQuitException;
+import com.phuc.tictactoe.online.sust.player.Player;
 
 /**
  * The game instance.
