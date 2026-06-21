@@ -1,10 +1,12 @@
 package com.phuc.tictactoe.online.sust;
 
+import java.io.PrintWriter;
 import java.util.Scanner;
 
-import com.phuc.tictactoe.online.sust.player.Computer;
-import com.phuc.tictactoe.online.sust.player.Human;
-import com.phuc.tictactoe.online.sust.player.Player;
+import com.phuc.tictactoe.online.sust.server.Game;
+import com.phuc.tictactoe.online.sust.server.player.Computer;
+import com.phuc.tictactoe.online.sust.server.player.Human;
+import com.phuc.tictactoe.online.sust.server.player.Player;
 
 /**
  * Tic Tac Toe App!
@@ -12,17 +14,19 @@ import com.phuc.tictactoe.online.sust.player.Player;
 public class App {
 
     public static void main(String[] args) {
+        PrintWriter outputStream = new PrintWriter(System.out, true);
+
         if (!isValidArguments(args)) {
-            System.out.println(Constants.INVALID_ARGUMENTS);
+            outputStream.println(Constants.INVALID_ARGUMENTS);
             return;
         }
 
         Scanner scanner = new Scanner(System.in);
 
-        Player playerOne = new Human("1", scanner);
+        Player playerOne = new Human("1", scanner, outputStream);
         Player playerTwo = new Computer("2");
 
-        Game game = new Game(processArguments(args), playerOne, playerTwo);
+        Game game = new Game(processArguments(args), playerOne, playerTwo, new PrintWriter(System.out, true));
 
         Thread gameThread = new Thread(() -> {
             game.start();

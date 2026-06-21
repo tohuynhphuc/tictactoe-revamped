@@ -2,6 +2,8 @@ package com.phuc.tictactoe.online.sust;
 
 public class Constants {
 
+    public static final int SOCKET_PORT = 4285;
+
     public static final String INVALID_ARGUMENTS = "Please, input a valid option [1-2]";
     public static final String INITIAL_MESSAGE = "Hello!";
     public static final String CELL_OCCUPIED = "The cell is occupied!";

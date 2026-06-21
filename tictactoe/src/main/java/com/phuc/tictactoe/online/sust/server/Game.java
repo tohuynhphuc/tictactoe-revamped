@@ -1,8 +1,11 @@
-package com.phuc.tictactoe.online.sust;
+package com.phuc.tictactoe.online.sust.server;
 
-import com.phuc.tictactoe.online.sust.board.Board;
+import java.io.PrintWriter;
+
+import com.phuc.tictactoe.online.sust.Constants;
 import com.phuc.tictactoe.online.sust.exception.GameQuitException;
-import com.phuc.tictactoe.online.sust.player.Player;
+import com.phuc.tictactoe.online.sust.server.board.Board;
+import com.phuc.tictactoe.online.sust.server.player.Player;
 
 /**
  * The game instance.
@@ -14,18 +17,20 @@ public class Game {
     private int currentPlayerId;
     private final Player playerOne;
     private final Player playerTwo;
+    private final PrintWriter output;
 
     /**
      * Initializes the game with the first player.
      * 
      * @param firstPlayer the first player (1-2)
      */
-    public Game(int firstPlayer, Player playerOne, Player playerTwo) {
-        board = new Board();
+    public Game(int firstPlayer, Player playerOne, Player playerTwo, PrintWriter printWriter) {
+        board = new Board(printWriter);
 
         currentPlayerId = firstPlayer;
         this.playerOne = playerOne;
         this.playerTwo = playerTwo;
+        this.output = printWriter;
     }
 
     /**
@@ -36,7 +41,7 @@ public class Game {
         try {
             startGameLoop();
         } catch (GameQuitException e) {
-            System.out.println(Constants.GAME_END);
+            output.println(Constants.GAME_END);
         }
     }
 
@@ -51,11 +56,11 @@ public class Game {
 
             if (board.checkWin()) {
                 board.display();
-                System.out.println("Player#" + currentPlayerId + " won!");
+                output.println("Player#" + currentPlayerId + " won!");
                 isGameEnd = true;
             } else if (board.isFull()) {
                 board.display();
-                System.out.println(Constants.DRAW_ANNOUNCEMENT);
+                output.println(Constants.DRAW_ANNOUNCEMENT);
                 isGameEnd = true;
             }
 
@@ -70,7 +75,7 @@ public class Game {
         Player currentPlayer = getCurrentPlayer();
 
         board.display();
-        System.out.println("Player#" + currentPlayerId + "\'s turn");
+        output.println("Player#" + currentPlayerId + "\'s turn");
 
         int move = currentPlayer.makeMove(board);
         if (move == -1) {
@@ -92,7 +97,7 @@ public class Game {
      * Prints welcome message.
      */
     private void welcome() {
-        System.out.println(Constants.INITIAL_MESSAGE);
+        output.println(Constants.INITIAL_MESSAGE);
     }
 
     /**

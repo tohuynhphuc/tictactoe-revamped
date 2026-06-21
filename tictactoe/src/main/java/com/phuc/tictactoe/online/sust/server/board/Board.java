@@ -1,4 +1,6 @@
-package com.phuc.tictactoe.online.sust.board;
+package com.phuc.tictactoe.online.sust.server.board;
+
+import java.io.PrintWriter;
 
 public class Board {
 
@@ -11,10 +13,13 @@ public class Board {
     /** Array of integers for values in the board. */
     private int[] boardData;
 
+    private final PrintWriter output;
+
     /**
      * Constructor for Board.
      */
-    public Board() {
+    public Board(PrintWriter printWriter) {
+        this.output = printWriter;
         setup();
     }
 
@@ -224,13 +229,25 @@ public class Board {
      */
     public void display() {
         for (int i = 0; i < SIZE; i++) {
-            System.out.print("|");
+            output.print("|");
             for (int j = 0; j < SIZE; j++) {
-                System.out.print(" " + boardData[i * 3 + j] + " ");
-                System.out.print("|");
+                output.print(" " + boardData[i * 3 + j] + " ");
+                output.print("|");
             }
-            System.out.print("\n");
+            output.print("\n");
         }
+    }
+
+    public String oneLiner() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("{");
+        for (int i = 0; i < NUM_CELLS; i++) {
+            sb.append(boardData[i]).append(i == NUM_CELLS - 1 ? "" : ",");
+        }
+        sb.append("}");
+
+        return sb.toString();
     }
 
     public int getNumCells() {
