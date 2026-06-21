@@ -5,10 +5,10 @@ import java.io.PrintWriter;
 public class Board {
 
     /** Size of the board. Hardcoded to 3. */
-    private final int SIZE = 3;
+    private static final int SIZE = 3;
 
     /** Total number of cells in the board. Hardcoded to a square board. */
-    private final int NUM_CELLS = SIZE * SIZE;
+    private static final int NUM_CELLS = SIZE * SIZE;
 
     /** Array of integers for values in the board. */
     private int[] boardData;
@@ -234,7 +234,7 @@ public class Board {
                 output.print(" " + boardData[i * 3 + j] + " ");
                 output.print("|");
             }
-            output.print("\n");
+            output.println();
         }
     }
 
@@ -248,6 +248,72 @@ public class Board {
         sb.append("}");
 
         return sb.toString();
+    }
+
+    public static boolean isOneLiner(String oneLiner) {
+        if (oneLiner == null) {
+            return false;
+        }
+
+        String trimmed = oneLiner.trim();
+
+        if (!trimmed.startsWith("{") || !trimmed.endsWith("}")) {
+            return false;
+        }
+
+        String contents = trimmed.substring(1, trimmed.length() - 1);
+        String[] cellValues = contents.split(",", -1);
+
+        if (cellValues.length != NUM_CELLS) {
+            return false;
+        }
+
+        for (String cellValue : cellValues) {
+            String valueText = cellValue.trim();
+
+            if (valueText.isEmpty()) {
+                return false;
+            }
+
+            int value;
+            try {
+                value = Integer.parseInt(valueText);
+            } catch (NumberFormatException e) {
+                return false;
+            }
+
+            if (value < 0 || value > 2) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Creates a Board from its one-line representation and assigns an output
+     * destination for display().
+     *
+     * @param oneLiner the serialized board
+     * @param output   output used by display()
+     * @return the parsed board
+     * @throws IllegalArgumentException if the format is invalid
+     */
+    public static Board fromOneLiner(String oneLiner, PrintWriter output) {
+        if (!isOneLiner(oneLiner)) {
+            throw new IllegalArgumentException("Invalid board representation: " + oneLiner);
+        }
+
+        String trimmed = oneLiner.trim();
+        String contents = trimmed.substring(1, trimmed.length() - 1);
+        String[] cellValues = contents.split(",", -1);
+
+        Board board = new Board(output);
+        for (int i = 0; i < cellValues.length; i++) {
+            String valueText = cellValues[i].trim();
+            board.boardData[i] = Integer.parseInt(valueText);
+        }
+
+        return board;
     }
 
     public int getNumCells() {

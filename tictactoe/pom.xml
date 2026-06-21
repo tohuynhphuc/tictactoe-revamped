@@ -141,7 +141,7 @@
 
                         <configuration>
                             <mainClass>
-                                com.phuc.tictactoe.online.sust.Client
+                                com.phuc.tictactoe.online.sust.client.Client
                             </mainClass>
                         </configuration>
                     </execution>
@@ -156,7 +156,7 @@
 
                         <configuration>
                             <mainClass>
-                                com.phuc.tictactoe.online.sust.Server
+                                com.phuc.tictactoe.online.sust.server.Server
                             </mainClass>
                         </configuration>
                     </execution>

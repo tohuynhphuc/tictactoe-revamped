@@ -26,7 +26,8 @@ public class App {
         Player playerOne = new Human("1", scanner, outputStream);
         Player playerTwo = new Computer("2");
 
-        Game game = new Game(processArguments(args), playerOne, playerTwo, new PrintWriter(System.out, true));
+        Game game = new Game(processArguments(args), playerOne, playerTwo,
+                new PrintWriter(System.out, true));
 
         Thread gameThread = new Thread(() -> {
             game.start();
