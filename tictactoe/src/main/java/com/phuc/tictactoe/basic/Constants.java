@@ -1,0 +1,12 @@
+package com.phuc.tictactoe.basic;
+
+public class Constants {
+
+    public static final String INVALID_ARGUMENTS = "Please, input a valid option [1-2]";
+    public static final String INITIAL_MESSAGE = "Hello!";
+    public static final String CELL_OCCUPIED = "The cell is occupied!";
+    public static final String CELL_INVALID = "Please, input a valid number [1-9]";
+    public static final String DRAW_ANNOUNCEMENT = "It is a draw!";
+    public static final String GAME_END = "Game ends!";
+
+}

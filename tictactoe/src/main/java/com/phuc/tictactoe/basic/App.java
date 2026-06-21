@@ -13,7 +13,7 @@ public class App {
 
     public static void main(String[] args) {
         if (!isValidArguments(args)) {
-            System.out.println("Please, input a valid option [1-2]");
+            System.out.println(Constants.INVALID_ARGUMENTS);
             return;
         }
 

@@ -1,6 +1,7 @@
 package com.phuc.tictactoe.basic.player;
 
 import com.phuc.tictactoe.basic.board.Board;
+import com.phuc.tictactoe.basic.exception.GameQuitException;
 
 public abstract class Player {
 
@@ -16,7 +17,7 @@ public abstract class Player {
      * @param board the board
      * @return the move
      */
-    public abstract int makeMove(Board board);
+    public abstract int makeMove(Board board) throws GameQuitException;
 
     public String getName() {
         return name;

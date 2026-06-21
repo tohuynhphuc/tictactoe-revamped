@@ -2,7 +2,9 @@ package com.phuc.tictactoe.basic.player;
 
 import java.util.Scanner;
 
+import com.phuc.tictactoe.basic.Constants;
 import com.phuc.tictactoe.basic.board.Board;
+import com.phuc.tictactoe.basic.exception.GameQuitException;
 
 public class Human extends Player {
 
@@ -14,25 +16,31 @@ public class Human extends Player {
     }
 
     @Override
-    public int makeMove(Board board) {
+    public int makeMove(Board board) throws GameQuitException {
         int cell = -1;
 
         boolean isValidMove = false;
         while (!isValidMove) {
+            String playersInput = scanner.nextLine();
+
+            if (playersInput.equalsIgnoreCase("q")) {
+                throw new GameQuitException();
+            }
+
             try {
-                cell = Integer.parseInt(scanner.nextLine());
+                cell = Integer.parseInt(playersInput);
             } catch (NumberFormatException e) {
-                System.out.println("Please, input a valid number [1-9]");
+                System.out.println(Constants.CELL_INVALID);
                 continue;
             }
 
             if (!board.isMoveInRange(cell)) {
-                System.out.println("Please, input a valid number [1-9]");
+                System.out.println(Constants.CELL_INVALID);
                 continue;
             }
 
             if (!board.isCellEmpty(cell)) {
-                System.out.println("The cell is occupied!");
+                System.out.println(Constants.CELL_OCCUPIED);
                 continue;
             }
 

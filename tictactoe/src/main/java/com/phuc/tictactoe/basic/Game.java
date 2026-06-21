@@ -1,6 +1,9 @@
 package com.phuc.tictactoe.basic;
 
+import java.lang.constant.Constable;
+
 import com.phuc.tictactoe.basic.board.Board;
+import com.phuc.tictactoe.basic.exception.GameQuitException;
 import com.phuc.tictactoe.basic.player.Player;
 
 /**
@@ -32,15 +35,17 @@ public class Game {
      */
     public void start() {
         welcome();
-        startGameLoop();
-
-        // System.out.println("Game ends!");
+        try {
+            startGameLoop();
+        } catch (GameQuitException e) {
+            System.out.println(Constants.GAME_END);
+        }
     }
 
     /**
      * Starts the game loop.
      */
-    private void startGameLoop() {
+    private void startGameLoop() throws GameQuitException {
         boolean isGameEnd = false;
 
         while (!isGameEnd) {
@@ -52,7 +57,7 @@ public class Game {
                 isGameEnd = true;
             } else if (board.isFull()) {
                 board.display();
-                System.out.println("It is a draw!");
+                System.out.println(Constants.DRAW_ANNOUNCEMENT);
                 isGameEnd = true;
             }
 
@@ -63,13 +68,16 @@ public class Game {
     /**
      * The current players make a move.
      */
-    private void currentPlayerMakeMove() {
+    private void currentPlayerMakeMove() throws GameQuitException {
         Player currentPlayer = getCurrentPlayer();
 
         board.display();
         System.out.println("Player#" + currentPlayerId + "\'s turn");
 
         int move = currentPlayer.makeMove(board);
+        if (move == -1) {
+            throw new GameQuitException();
+        }
         board.setCell(move, currentPlayerId);
     }
 
@@ -86,7 +94,7 @@ public class Game {
      * Prints welcome message.
      */
     private void welcome() {
-        System.out.println("Hello!");
+        System.out.println(Constants.INITIAL_MESSAGE);
     }
 
     /**

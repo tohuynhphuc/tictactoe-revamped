@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.phuc.tictactoe.basic.board.Board;
+import com.phuc.tictactoe.basic.exception.GameQuitException;
 
 public class PlayerTest {
 
@@ -36,13 +37,13 @@ public class PlayerTest {
     }
 
     @Test
-    public void shouldSelectFirstAvailableCell() {
+    public void shouldSelectFirstAvailableCell() throws GameQuitException {
         int move = computer.makeMove(board);
         assertEquals(1, move, "Computer should select cell 1 (first available)");
     }
 
     @Test
-    public void shouldSkipOccupiedCells() {
+    public void shouldSkipOccupiedCells() throws GameQuitException {
         board.setCell(1, 1);
         board.setCell(2, 2);
         int move = computer.makeMove(board);
@@ -50,7 +51,7 @@ public class PlayerTest {
     }
 
     @Test
-    public void shouldSelectNextAvailableCellWhenMultipleFilled() {
+    public void shouldSelectNextAvailableCellWhenMultipleFilled() throws GameQuitException {
         board.setCell(1, 1);
         board.setCell(2, 1);
         board.setCell(3, 1);
@@ -60,7 +61,7 @@ public class PlayerTest {
     }
 
     @Test
-    public void shouldReturnNegativeOneWhenNoMovesAvailable() {
+    public void shouldReturnNegativeOneWhenNoMovesAvailable() throws GameQuitException {
         for (int i = 1; i <= 9; i++) {
             board.setCell(i, 1);
         }
@@ -69,7 +70,7 @@ public class PlayerTest {
     }
 
     @Test
-    public void shouldSelectLastCellWhenOnlyOneAvailable() {
+    public void shouldSelectLastCellWhenOnlyOneAvailable() throws GameQuitException {
         for (int i = 1; i <= 8; i++) {
             board.setCell(i, 1);
         }
@@ -78,35 +79,35 @@ public class PlayerTest {
     }
 
     @Test
-    public void shouldAcceptValidMove() {
+    public void shouldAcceptValidMove() throws GameQuitException {
         human = createHumanWithInput("1\n");
         int move = human.makeMove(board);
         assertEquals(1, move, "Human should accept valid move 1");
     }
 
     @Test
-    public void shouldRetryOnNonNumericInput() {
+    public void shouldRetryOnNonNumericInput() throws GameQuitException {
         human = createHumanWithInput("abc\n5\n");
         int move = human.makeMove(board);
         assertEquals(5, move, "Human should retry and accept 5 after invalid input");
     }
 
     @Test
-    public void shouldRetryOnOutOfRangeInput() {
+    public void shouldRetryOnOutOfRangeInput() throws GameQuitException {
         human = createHumanWithInput("10\n7\n");
         int move = human.makeMove(board);
         assertEquals(7, move, "Human should retry and accept 7 after out-of-range input");
     }
 
     @Test
-    public void shouldRetryOnNegativeInput() {
+    public void shouldRetryOnNegativeInput() throws GameQuitException {
         human = createHumanWithInput("-1\n3\n");
         int move = human.makeMove(board);
         assertEquals(3, move, "Human should retry and accept 3 after negative input");
     }
 
     @Test
-    public void shouldRetryOnOccupiedCell() {
+    public void shouldRetryOnOccupiedCell() throws GameQuitException {
         board.setCell(5, 1);
         human = createHumanWithInput("5\n6\n");
         int move = human.makeMove(board);
@@ -114,7 +115,7 @@ public class PlayerTest {
     }
 
     @Test
-    public void shouldHandleMultipleRetries() {
+    public void shouldHandleMultipleRetries() throws GameQuitException {
         board.setCell(1, 1);
         human = createHumanWithInput("abc\n10\n-5\n1\n4\n");
         int move = human.makeMove(board);
@@ -122,7 +123,7 @@ public class PlayerTest {
     }
 
     @Test
-    public void shouldRejectAllInvalidCellNumbers() {
+    public void shouldRejectAllInvalidCellNumbers() throws GameQuitException {
         String[] invalidInputs = { "0\n1\n", "10\n2\n", "100\n3\n", "-1\n4\n" };
         for (String input : invalidInputs) {
             Human testHuman = createHumanWithInput(input);
