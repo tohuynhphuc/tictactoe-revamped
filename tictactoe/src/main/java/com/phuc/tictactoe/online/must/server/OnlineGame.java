@@ -14,19 +14,23 @@ import com.phuc.tictactoe.online.must.server.player.Computer;
  */
 public class OnlineGame {
 
-    private final Board board;
     private final Computer computer;
     private boolean isFinished;
 
     public OnlineGame() {
-        board = new Board(new PrintWriter(OutputStream.nullOutputStream(), true));
-
         this.computer = new Computer("2");
         this.isFinished = false;
     }
 
     public ServerResponse processRequest(ClientRequest request) {
         int clientMove = request.getMove();
+
+        if (clientMove == 0) {
+            isFinished = false;
+            return new ServerResponse(isFinished,
+                    new Board(new PrintWriter(OutputStream.nullOutputStream(), true)).oneLiner(),
+                    Constants.INITIAL_MESSAGE);
+        }
 
         if (clientMove == -1) {
             isFinished = true;
@@ -36,6 +40,8 @@ public class OnlineGame {
         if (clientMove == -2) {
             return new ServerResponse(isFinished, request.getBoard(), Constants.CELL_INVALID);
         }
+
+        Board board = Board.fromOneLiner(request.getBoard(), new PrintWriter(OutputStream.nullOutputStream(), true));
 
         if (!board.isMoveInRange(clientMove)) {
             return new ServerResponse(isFinished, request.getBoard(), Constants.CELL_INVALID);
