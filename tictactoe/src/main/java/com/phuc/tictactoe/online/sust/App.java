@@ -3,7 +3,6 @@ package com.phuc.tictactoe.online.sust;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
-import com.phuc.tictactoe.online.sust.server.Game;
 import com.phuc.tictactoe.online.sust.server.player.Computer;
 import com.phuc.tictactoe.online.sust.server.player.Human;
 import com.phuc.tictactoe.online.sust.server.player.Player;

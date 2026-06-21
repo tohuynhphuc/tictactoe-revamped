@@ -1,10 +1,9 @@
-package com.phuc.tictactoe.online.sust.server;
+package com.phuc.tictactoe.online.sust;
 
 import java.io.PrintWriter;
 
-import com.phuc.tictactoe.online.sust.Constants;
+import com.phuc.tictactoe.online.sust.board.Board;
 import com.phuc.tictactoe.online.sust.exception.GameQuitException;
-import com.phuc.tictactoe.online.sust.server.board.Board;
 import com.phuc.tictactoe.online.sust.server.player.Player;
 
 /**

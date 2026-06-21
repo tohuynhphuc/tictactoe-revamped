@@ -1,6 +1,6 @@
 package com.phuc.tictactoe.online.sust.server.player;
 
-import com.phuc.tictactoe.online.sust.server.board.Board;
+import com.phuc.tictactoe.online.sust.board.Board;
 
 public class Computer extends Player {
 

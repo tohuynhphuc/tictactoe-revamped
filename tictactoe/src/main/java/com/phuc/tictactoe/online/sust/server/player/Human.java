@@ -4,8 +4,8 @@ import java.io.PrintWriter;
 import java.util.Scanner;
 
 import com.phuc.tictactoe.online.sust.Constants;
+import com.phuc.tictactoe.online.sust.board.Board;
 import com.phuc.tictactoe.online.sust.exception.GameQuitException;
-import com.phuc.tictactoe.online.sust.server.board.Board;
 
 public class Human extends Player {
 

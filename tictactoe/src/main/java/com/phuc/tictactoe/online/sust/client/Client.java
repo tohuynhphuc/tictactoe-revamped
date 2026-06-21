@@ -7,41 +7,82 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 import com.phuc.tictactoe.online.sust.Constants;
-import com.phuc.tictactoe.online.sust.server.board.Board;
+import com.phuc.tictactoe.online.sust.board.Board;
+import com.phuc.tictactoe.online.sust.protocol.ClientRequest;
+import com.phuc.tictactoe.online.sust.protocol.ServerResponse;
 
 public class Client {
+
+    private static String currentBoard;
 
     public static void main(String[] args) {
         BufferedReader consoleInput = new BufferedReader(new InputStreamReader(System.in));
 
-        try (Socket socket = new Socket("localhost", Constants.SOCKET_PORT);
-                BufferedReader serverInput = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                PrintWriter serverOutput = new PrintWriter(socket.getOutputStream(), true);) {
-            System.out.println(serverInput.readLine());
-
-            while (true) {
-                String request = consoleInput.readLine();
-                request = request == null ? "q" : request;
-
-                serverOutput.println(request);
-
-                String response = serverInput.readLine();
-
-                if (response == null) {
-                    System.out.println("Server closed the connection.");
-                    break;
-                }
-
-                if (Board.isOneLiner(response)) {
-                    Board receivedBoard = Board.fromOneLiner(response, new PrintWriter(System.out, true));
-                    receivedBoard.display();
-                } else {
-                    System.out.println("[Server] " + response);
-                }
-            }
+        try {
+            connectsToServer(consoleInput, new PrintWriter(System.out, true));
         } catch (IOException e) {
             System.err.println("Failed to Connect to Server. Program Exiting.");
             System.err.println("Error Message: " + e.getMessage());
+        }
+    }
+
+    private static void connectsToServer(BufferedReader consoleInput, PrintWriter consoleOutput) throws IOException {
+        try (Socket socket = new Socket(Constants.SOCKET_ADDRESS, Constants.SOCKET_PORT)) {
+            BufferedReader serverInput = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            PrintWriter serverOutput = new PrintWriter(socket.getOutputStream(), true);
+
+            ServerResponse initialMessage = new ServerResponse();
+            initialMessage.decode(serverInput.readLine());
+            consoleOutput.println(initialMessage.getMessage());
+            currentBoard = initialMessage.getBoard();
+            Board.fromOneLiner(currentBoard, consoleOutput).display();
+
+            startRequestResponseLoop(socket, consoleInput, consoleOutput, serverInput, serverOutput);
+        }
+    }
+
+    private static void startRequestResponseLoop(Socket socket, BufferedReader consoleInput, PrintWriter output,
+            BufferedReader serverInput, PrintWriter serverOutput) throws IOException {
+        while (true) {
+            String request = consoleInput.readLine();
+            request = request == null ? "q" : request;
+
+            int playerMove;
+            if (request.equalsIgnoreCase("q")) {
+                playerMove = -1;
+            } else {
+                try {
+                    playerMove = Integer.parseInt(request);
+                } catch (NumberFormatException e) {
+                    playerMove = -2;
+                }
+            }
+
+            ClientRequest clientRequestProtocol = new ClientRequest(playerMove, currentBoard);
+            serverOutput.println(clientRequestProtocol);
+
+            String response = serverInput.readLine();
+            if (response == null) {
+                output.println("Server closed the connection.");
+                break;
+            }
+
+            ServerResponse serverResponse = new ServerResponse();
+            serverResponse.decode(response);
+
+            output.println(serverResponse.getMessage());
+            currentBoard = serverResponse.getBoard();
+
+            if (Board.isOneLiner(currentBoard)) {
+                Board receivedBoard = Board.fromOneLiner(serverResponse.getBoard(), new PrintWriter(System.out, true));
+                receivedBoard.display();
+            } else {
+                output.println("[Server] " + response);
+            }
+
+            if (serverResponse.isFinished()) {
+                break;
+            }
         }
     }
 

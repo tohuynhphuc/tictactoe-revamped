@@ -4,7 +4,9 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 
 import com.phuc.tictactoe.online.sust.Constants;
-import com.phuc.tictactoe.online.sust.server.board.Board;
+import com.phuc.tictactoe.online.sust.board.Board;
+import com.phuc.tictactoe.online.sust.protocol.ClientRequest;
+import com.phuc.tictactoe.online.sust.protocol.ServerResponse;
 import com.phuc.tictactoe.online.sust.server.player.Computer;
 
 /**
@@ -23,36 +25,34 @@ public class OnlineGame {
         this.isFinished = false;
     }
 
-    public String processRequest(String request) {
-        if (request.equalsIgnoreCase("q")) {
+    public ServerResponse processRequest(ClientRequest request) {
+        int clientMove = request.getMove();
+
+        if (clientMove == -1) {
             isFinished = true;
-            return Constants.GAME_END;
+            return new ServerResponse(isFinished, request.getBoard(), Constants.GAME_END);
         }
 
-        int clientMove;
-
-        try {
-            clientMove = Integer.parseInt(request);
-        } catch (NumberFormatException e) {
-            return Constants.CELL_INVALID;
+        if (clientMove == -2) {
+            return new ServerResponse(isFinished, request.getBoard(), Constants.CELL_INVALID);
         }
 
         if (!board.isMoveInRange(clientMove)) {
-            return Constants.CELL_INVALID;
+            return new ServerResponse(isFinished, request.getBoard(), Constants.CELL_INVALID);
         }
 
         if (!board.isCellEmpty(clientMove)) {
-            return Constants.CELL_OCCUPIED;
+            return new ServerResponse(isFinished, request.getBoard(), Constants.CELL_OCCUPIED);
         }
 
         board.setCell(clientMove, 1);
 
         if (board.checkWin()) {
             isFinished = true;
-            return "Player#1 won!";
+            return new ServerResponse(isFinished, board, "Player#1 won!");
         } else if (board.isFull()) {
             isFinished = true;
-            return Constants.DRAW_ANNOUNCEMENT;
+            return new ServerResponse(isFinished, board, Constants.DRAW_ANNOUNCEMENT);
         }
 
         int computerMove = computer.makeMove(board);
@@ -60,13 +60,12 @@ public class OnlineGame {
 
         if (board.checkWin()) {
             isFinished = true;
-            return "Player#2 won!";
+            return new ServerResponse(isFinished, board, "Player#2 won!");
         } else if (board.isFull()) {
             isFinished = true;
-            return Constants.DRAW_ANNOUNCEMENT;
+            return new ServerResponse(isFinished, board, Constants.DRAW_ANNOUNCEMENT);
         }
-
-        return board.oneLiner();
+        return new ServerResponse(isFinished, board, "Player#1's turn");
     }
 
     public boolean isFinished() {

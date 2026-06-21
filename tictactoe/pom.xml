@@ -88,7 +88,7 @@
                                 <manifest>
                                     <addClasspath>true</addClasspath>
                                     <mainClass>
-                                        com.phuc.tictactoe.online.sust.Client
+                                        com.phuc.tictactoe.online.sust.client.Client
                                     </mainClass>
                                 </manifest>
                             </archive>
@@ -108,7 +108,7 @@
                                 <manifest>
                                     <addClasspath>true</addClasspath>
                                     <mainClass>
-                                        com.phuc.tictactoe.online.sust.Server
+                                        com.phuc.tictactoe.online.sust.server.Server
                                     </mainClass>
                                 </manifest>
                             </archive>

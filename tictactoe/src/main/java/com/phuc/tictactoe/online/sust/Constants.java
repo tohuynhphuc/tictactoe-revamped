@@ -3,6 +3,7 @@ package com.phuc.tictactoe.online.sust;
 public class Constants {
 
     public static final int SOCKET_PORT = 4285;
+    public static final String SOCKET_ADDRESS = "localhost";
 
     public static final String INVALID_ARGUMENTS = "Please, input a valid option [1-2]";
     public static final String INITIAL_MESSAGE = "Hello!";

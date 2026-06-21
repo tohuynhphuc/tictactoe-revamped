@@ -1,4 +1,4 @@
-package com.phuc.tictactoe.online.sust.server.board;
+package com.phuc.tictactoe.online.sust.board;
 
 import java.io.PrintWriter;
 
