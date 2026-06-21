@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import com.phuc.tictactoe.online.mumt.Constants;
 import com.phuc.tictactoe.online.mumt.board.Board;
@@ -17,6 +19,8 @@ public class Server {
     private static ServerSocket serverSocket;
 
     public static void main(String[] args) {
+        ExecutorService threadPool = Executors.newFixedThreadPool(4);
+
         try {
             serverSocket = new ServerSocket(Constants.SOCKET_PORT);
         } catch (IOException e) {
@@ -31,14 +35,14 @@ public class Server {
             try {
                 Socket clientSocket = serverSocket.accept();
 
-                new Thread(() -> {
+                threadPool.execute(() -> {
                     try {
                         acceptClient(clientSocket);
                     } catch (IOException e) {
                         System.err.println("Failed to Connect to Client. Program Exiting.");
                         System.err.println("Error Message: " + e.getMessage());
                     }
-                }).start();
+                });
 
             } catch (IOException e) {
                 System.err.println("Failed to Connect to Client. Program Exiting.");
