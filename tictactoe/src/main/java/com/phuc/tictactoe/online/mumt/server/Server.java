@@ -29,7 +29,17 @@ public class Server {
 
         while (true) {
             try {
-                acceptClient();
+                Socket clientSocket = serverSocket.accept();
+
+                new Thread(() -> {
+                    try {
+                        acceptClient(clientSocket);
+                    } catch (IOException e) {
+                        System.err.println("Failed to Connect to Client. Program Exiting.");
+                        System.err.println("Error Message: " + e.getMessage());
+                    }
+                }).start();
+
             } catch (IOException e) {
                 System.err.println("Failed to Connect to Client. Program Exiting.");
                 System.err.println("Error Message: " + e.getMessage());
@@ -38,8 +48,7 @@ public class Server {
         }
     }
 
-    private static void acceptClient() throws IOException {
-        Socket clientSocket = serverSocket.accept();
+    private static void acceptClient(Socket clientSocket) throws IOException {
         BufferedReader input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         PrintWriter output = new PrintWriter(clientSocket.getOutputStream(), true);
         output.println(new ServerResponse(false, new Board(output).oneLiner(), Constants.INITIAL_MESSAGE));

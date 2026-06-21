@@ -10,7 +10,7 @@
 
     <groupId>com.phuc</groupId>
     <artifactId>tictactoe</artifactId>
-    <version>0.5</version>
+    <version>0.6</version>
     <packaging>jar</packaging>
 
     <name>tictactoe</name>
@@ -88,7 +88,7 @@
                                 <manifest>
                                     <addClasspath>true</addClasspath>
                                     <mainClass>
-                                        com.phuc.tictactoe.online.sust.client.Client
+                                        com.phuc.tictactoe.online.mumt.client.Client
                                     </mainClass>
                                 </manifest>
                             </archive>
@@ -108,7 +108,7 @@
                                 <manifest>
                                     <addClasspath>true</addClasspath>
                                     <mainClass>
-                                        com.phuc.tictactoe.online.sust.server.Server
+                                        com.phuc.tictactoe.online.mumt.server.Server
                                     </mainClass>
                                 </manifest>
                             </archive>
@@ -126,7 +126,7 @@
 
                 <!-- Keep normal mvn exec:java running the old basic App (now also in online.sust) -->
                 <configuration>
-                    <mainClass>com.phuc.tictactoe.online.sust.App</mainClass>
+                    <mainClass>com.phuc.tictactoe.online.mumt.App</mainClass>
                 </configuration>
 
                 <executions>
@@ -141,7 +141,7 @@
 
                         <configuration>
                             <mainClass>
-                                com.phuc.tictactoe.online.sust.client.Client
+                                com.phuc.tictactoe.online.mumt.client.Client
                             </mainClass>
                         </configuration>
                     </execution>
@@ -156,7 +156,7 @@
 
                         <configuration>
                             <mainClass>
-                                com.phuc.tictactoe.online.sust.server.Server
+                                com.phuc.tictactoe.online.mumt.server.Server
                             </mainClass>
                         </configuration>
                     </execution>
