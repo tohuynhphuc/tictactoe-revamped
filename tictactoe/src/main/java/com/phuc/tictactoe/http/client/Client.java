@@ -4,7 +4,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.Socket;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 
 import com.phuc.tictactoe.http.board.Board;
 import com.phuc.tictactoe.http.protocol.ClientRequest;
@@ -13,19 +18,28 @@ import com.phuc.tictactoe.http.util.Constants;
 
 public class Client {
 
+    private static final String GAME_PATH = "/game";
+    private static final HttpClient HTTP_CLIENT = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(5)).build();
+    private static final URI SERVER_URI = URI
+            .create("http://" + Constants.SOCKET_ADDRESS + ":" + Constants.SOCKET_PORT + GAME_PATH);
+
     private static String currentBoard = "";
     private static String currentHashBoard = "";
+
     private static int currentNonce = 0;
     private static String currentHashNonce = "";
+
     private static long currentTimestamp = 0;
     private static String currentHashTimestamp = "";
+
     private static boolean isFirstConnect = true;
 
     public static void main(String[] args) {
         BufferedReader consoleInput = new BufferedReader(new InputStreamReader(System.in));
+        PrintWriter consoleOutput = new PrintWriter(System.out, true);
 
         try {
-            startRequestResponseLoop(consoleInput, new PrintWriter(System.out, true));
+            startRequestResponseLoop(consoleInput, consoleOutput);
         } catch (IOException e) {
             System.err.println("Failed to Connect to Server. Program Exiting.");
             System.err.println("Error Message: " + e.getMessage());
@@ -35,17 +49,16 @@ public class Client {
     private static void startRequestResponseLoop(BufferedReader consoleInput, PrintWriter consoleOutput)
             throws IOException {
         while (true) {
-            String response;
+            ClientRequest clientRequest;
             if (isFirstConnect) {
-                ClientRequest initialRequestProtocol = new ClientRequest();
-                response = sendMessageAndReceive(initialRequestProtocol);
+                clientRequest = new ClientRequest();
                 isFirstConnect = false;
             } else {
                 int playerMove = getUserMove(consoleInput);
-                ClientRequest clientRequestProtocol = new ClientRequest(playerMove, currentBoard, currentHashBoard,
-                        currentNonce, currentHashNonce, currentTimestamp, currentHashTimestamp);
-                response = sendMessageAndReceive(clientRequestProtocol);
+                clientRequest = new ClientRequest(playerMove, currentBoard, currentHashBoard, currentNonce,
+                        currentHashNonce, currentTimestamp, currentHashTimestamp);
             }
+            String response = sendMessageAndReceive(clientRequest);
             if (response == null) {
                 consoleOutput.println("Server closed the connection.");
                 break;
@@ -55,6 +68,7 @@ public class Client {
             serverResponse.decode(response);
 
             consoleOutput.println(serverResponse.getMessage());
+
             currentBoard = serverResponse.getBoard();
             currentHashBoard = serverResponse.getHashBoard();
             currentNonce = serverResponse.getNonce();
@@ -75,13 +89,30 @@ public class Client {
     }
 
     private static String sendMessageAndReceive(ClientRequest request) throws IOException {
-        try (Socket socket = new Socket(Constants.SOCKET_ADDRESS, Constants.SOCKET_PORT)) {
-            PrintWriter serverOutput = new PrintWriter(socket.getOutputStream(), true);
-            BufferedReader serverInput = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            serverOutput.println(request);
+        HttpRequest httpRequest = HttpRequest.newBuilder()
+                .uri(SERVER_URI)
+                .timeout(Duration.ofSeconds(10))
+                .header("Content-Type", "text/plain; charset=UTF-8")
+                .header("Accept", "text/plain")
+                .POST(HttpRequest.BodyPublishers.ofString(request.toString(), StandardCharsets.UTF_8))
+                .build();
 
-            String response = serverInput.readLine();
-            return response;
+        try {
+            HttpResponse<String> httpResponse = HTTP_CLIENT.send(httpRequest,
+                    HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
+
+            if (httpResponse.statusCode() != 200) {
+                throw new IOException("Server returned HTTP " + httpResponse.statusCode() + ": " + httpResponse.body());
+            }
+
+            if (httpResponse.body() == null || httpResponse.body().isBlank()) {
+                throw new IOException("Server returned an empty response.");
+            }
+
+            return httpResponse.body();
+        } catch (IOException | InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new IOException("Interrupted while waiting for server response.", e);
         }
     }
 

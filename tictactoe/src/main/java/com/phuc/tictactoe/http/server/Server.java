@@ -18,8 +18,6 @@ import com.sun.net.httpserver.HttpServer;
 
 public class Server {
 
-    // private static ServerSocket serverSocket;
-
     private static final String GAME_PATH = "/game";
 
     private static final String SECRET_HASH_BOARD_KEY = "secket Key 3312%";
