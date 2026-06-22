@@ -40,7 +40,7 @@ public class Server {
                 }
             }
         } catch (IOException e) {
-            System.err.println("Failed to Wotk with Server Socket. Program Exiting.");
+            System.err.println("Failed to Work with Server Socket. Program Exiting.");
             System.err.println("Error Message: " + e.getMessage());
         } catch (SQLException e) {
             System.err.println("Failed to Work with Database. Program Exiting.");
