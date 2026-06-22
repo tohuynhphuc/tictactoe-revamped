@@ -1,12 +1,14 @@
 package com.phuc.tictactoe.online.secure.protocol;
 
 import com.phuc.tictactoe.online.secure.board.Board;
+import com.phuc.tictactoe.online.secure.server.Server;
 
 public class ServerResponse implements Protocol {
 
     private boolean isFinished;
     private String board;
     private String message;
+    private String hashBoard;
 
     public ServerResponse() {
 
@@ -16,6 +18,7 @@ public class ServerResponse implements Protocol {
         this.isFinished = isFinished;
         this.board = board;
         this.message = message;
+        this.hashBoard = Server.generateHash(board);
     }
 
     public ServerResponse(boolean isFinished, Board board, String message) {
@@ -24,7 +27,7 @@ public class ServerResponse implements Protocol {
 
     @Override
     public int getSize() {
-        return 3;
+        return 4;
     }
 
     @Override
@@ -36,6 +39,7 @@ public class ServerResponse implements Protocol {
         this.isFinished = finished;
         this.board = parts[1];
         this.message = parts[2];
+        this.hashBoard = parts[3];
     }
 
     @Override
@@ -72,7 +76,8 @@ public class ServerResponse implements Protocol {
         sb.append("[");
         sb.append(isFinished ? 1 : 0).append(";");
         sb.append(board).append(";");
-        sb.append(message);
+        sb.append(message).append(";");
+        sb.append(hashBoard);
         sb.append("]");
 
         return sb.toString();
@@ -88,6 +93,10 @@ public class ServerResponse implements Protocol {
 
     public String getMessage() {
         return message;
+    }
+
+    public String getHashBoard() {
+        return hashBoard;
     }
 
 }

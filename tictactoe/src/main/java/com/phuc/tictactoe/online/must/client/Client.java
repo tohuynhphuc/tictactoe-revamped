@@ -84,6 +84,9 @@ public class Client {
         } else {
             try {
                 playerMove = Integer.parseInt(request);
+                if (playerMove <= 0 || playerMove >= 10) {
+                    playerMove = -2;
+                }
             } catch (NumberFormatException e) {
                 playerMove = -2;
             }

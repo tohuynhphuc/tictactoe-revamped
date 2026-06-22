@@ -7,19 +7,21 @@ public class ClientRequest implements Protocol {
     /** Move 1-9, -1 = quit, -2 = invalid */
     private int move;
     private String board;
+    private String hashBoard;
 
     public ClientRequest() {
 
     }
 
-    public ClientRequest(int move, String board) {
+    public ClientRequest(int move, String board, String hashBoard) {
         this.move = move;
         this.board = board;
+        this.hashBoard = hashBoard;
     }
 
     @Override
     public int getSize() {
-        return 2;
+        return 3;
     }
 
     @Override
@@ -29,6 +31,7 @@ public class ClientRequest implements Protocol {
 
         this.move = Integer.parseInt(parts[0]);
         this.board = parts[1];
+        this.hashBoard = parts[2];
     }
 
     @Override
@@ -66,7 +69,8 @@ public class ClientRequest implements Protocol {
 
         sb.append("[");
         sb.append(move).append(";");
-        sb.append(board);
+        sb.append(board).append(";");
+        sb.append(hashBoard);
         sb.append("]");
 
         return sb.toString();
@@ -78,6 +82,10 @@ public class ClientRequest implements Protocol {
 
     public String getBoard() {
         return board;
+    }
+
+    public String getHashBoard() {
+        return hashBoard;
     }
 
 }

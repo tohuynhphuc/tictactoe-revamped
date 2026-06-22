@@ -7,13 +7,16 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import com.phuc.tictactoe.online.secure.Constants;
 import com.phuc.tictactoe.online.secure.protocol.ClientRequest;
 import com.phuc.tictactoe.online.secure.protocol.ServerResponse;
+import com.phuc.tictactoe.online.secure.util.Constants;
+import com.phuc.tictactoe.online.secure.util.Hash;
 
 public class Server {
 
     private static ServerSocket serverSocket;
+
+    private static String SECRET_HASH_BOARD_KEY = "secket Key 3312%";
 
     public static void main(String[] args) {
         try {
@@ -51,6 +54,14 @@ public class Server {
         clientRequest.decode(input.readLine());
         ServerResponse response = game.processRequest(clientRequest);
         output.println(response);
+    }
+
+    public static String generateHash(String input) {
+        return Hash.sha256(input + SECRET_HASH_BOARD_KEY);
+    }
+
+    public static boolean verifyHash(String input, String originalHash) {
+        return Hash.sha256(input + SECRET_HASH_BOARD_KEY).equals(originalHash);
     }
 
 }

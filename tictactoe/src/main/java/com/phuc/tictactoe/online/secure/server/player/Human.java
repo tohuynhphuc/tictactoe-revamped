@@ -3,9 +3,9 @@ package com.phuc.tictactoe.online.secure.server.player;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
-import com.phuc.tictactoe.online.secure.Constants;
 import com.phuc.tictactoe.online.secure.board.Board;
 import com.phuc.tictactoe.online.secure.exception.GameQuitException;
+import com.phuc.tictactoe.online.secure.util.Constants;
 
 public class Human extends Player {
 

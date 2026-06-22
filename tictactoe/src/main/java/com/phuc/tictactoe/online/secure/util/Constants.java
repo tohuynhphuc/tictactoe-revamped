@@ -1,4 +1,4 @@
-package com.phuc.tictactoe.online.secure;
+package com.phuc.tictactoe.online.secure.util;
 
 public class Constants {
 
@@ -11,5 +11,6 @@ public class Constants {
     public static final String CELL_INVALID = "Please, input a valid number [1-9]";
     public static final String DRAW_ANNOUNCEMENT = "It is a draw!";
     public static final String GAME_END = "Game ends!";
+    public static final String CHEATER_FOUND = "CHEATER! You lose.";
 
 }

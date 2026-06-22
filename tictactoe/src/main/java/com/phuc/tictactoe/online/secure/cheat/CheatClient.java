@@ -1,4 +1,4 @@
-package com.phuc.tictactoe.online.secure.client;
+package com.phuc.tictactoe.online.secure.cheat;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,14 +11,14 @@ import com.phuc.tictactoe.online.secure.protocol.ClientRequest;
 import com.phuc.tictactoe.online.secure.protocol.ServerResponse;
 import com.phuc.tictactoe.online.secure.util.Constants;
 
-public class Client {
+public class CheatClient {
 
     private static String currentBoard = "";
     private static String currentHashBoard = "";
-    private static boolean isFirstConnect = true;
 
     public static void main(String[] args) {
         BufferedReader consoleInput = new BufferedReader(new InputStreamReader(System.in));
+        System.out.println("CHEAT CLIENT! BEWARE...");
 
         try {
             startRequestResponseLoop(consoleInput, new PrintWriter(System.out, true));
@@ -31,16 +31,13 @@ public class Client {
     private static void startRequestResponseLoop(BufferedReader consoleInput, PrintWriter consoleOutput)
             throws IOException {
         while (true) {
-            String response;
-            if (isFirstConnect) {
-                ClientRequest initialRequestProtocol = new ClientRequest(0, currentBoard, "");
-                response = sendMessageAndReceive(initialRequestProtocol);
-                isFirstConnect = false;
-            } else {
-                int playerMove = getUserMove(consoleInput);
-                ClientRequest clientRequestProtocol = new ClientRequest(playerMove, currentBoard, currentHashBoard);
-                response = sendMessageAndReceive(clientRequestProtocol);
-            }
+            int manualMove = getManualMove(consoleInput, consoleOutput);
+            String manualBoard = getManualBoard(consoleInput, consoleOutput);
+            String manualHashBoard = getManualHashBoard(consoleInput, consoleOutput);
+
+            ClientRequest clientRequestProtocol = new ClientRequest(manualMove, manualBoard, manualHashBoard);
+
+            String response = sendMessageAndReceive(clientRequestProtocol);
             if (response == null) {
                 consoleOutput.println("Server closed the connection.");
                 break;
@@ -77,7 +74,9 @@ public class Client {
         }
     }
 
-    private static int getUserMove(BufferedReader consoleInput) throws IOException {
+    private static int getManualMove(BufferedReader consoleInput, PrintWriter consoleOutput) throws IOException {
+        consoleOutput.println("Enter move [1-9], or q to quit.");
+
         String request = consoleInput.readLine();
         request = request == null ? "q" : request;
 
@@ -95,6 +94,48 @@ public class Client {
             }
         }
         return playerMove;
+    }
+
+    private static String getManualBoard(BufferedReader consoleInput, PrintWriter consoleOutput) throws IOException {
+        while (true) {
+            consoleOutput.println("Enter board as 9 digits using 0, 1, and 2: ");
+            String input = consoleInput.readLine();
+
+            if (input == null) {
+                return "";
+            }
+
+            input = input.trim();
+            if (!input.matches("[0-2]{9}")) {
+                consoleOutput.println("Invalid board. Enter exactly 9 digits containing only 0, 1, or 2.");
+                continue;
+            }
+
+            return convertDigitsToOneLiner(input);
+        }
+    }
+
+    private static String convertDigitsToOneLiner(String digits) {
+        StringBuilder board = new StringBuilder();
+
+        board.append("{");
+        for (int i = 0; i < digits.length(); i++) {
+            board.append(digits.charAt(i));
+            if (i < digits.length() - 1) {
+                board.append(",");
+            }
+        }
+        board.append("}");
+
+        return board.toString();
+    }
+
+    private static String getManualHashBoard(BufferedReader consoleInput, PrintWriter consoleOutput)
+            throws IOException {
+        consoleOutput.println("Enter hashBoard manually: ");
+        String hashBoard = consoleInput.readLine();
+
+        return hashBoard == null ? "" : hashBoard.trim();
     }
 
 }

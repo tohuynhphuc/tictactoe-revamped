@@ -3,11 +3,11 @@ package com.phuc.tictactoe.online.secure.server;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 
-import com.phuc.tictactoe.online.secure.Constants;
 import com.phuc.tictactoe.online.secure.board.Board;
 import com.phuc.tictactoe.online.secure.protocol.ClientRequest;
 import com.phuc.tictactoe.online.secure.protocol.ServerResponse;
 import com.phuc.tictactoe.online.secure.server.player.Computer;
+import com.phuc.tictactoe.online.secure.util.Constants;
 
 /**
  * The game instance.
@@ -39,6 +39,11 @@ public class OnlineGame {
 
         if (clientMove == -2) {
             return new ServerResponse(isFinished, request.getBoard(), Constants.CELL_INVALID);
+        }
+
+        if (!Server.verifyHash(request.getBoard(), request.getHashBoard())) {
+            isFinished = true;
+            return new ServerResponse(isFinished, request.getBoard(), Constants.CHEATER_FOUND);
         }
 
         Board board = Board.fromOneLiner(request.getBoard(), new PrintWriter(OutputStream.nullOutputStream(), true));
