@@ -41,9 +41,14 @@ public class OnlineGame {
             return new ServerResponse(isFinished, request.getBoard(), Constants.CELL_INVALID);
         }
 
-        if (!Server.verifyHash(request.getBoard(), request.getHashBoard())) {
+        boolean isHashBoardCorrect = Server.verifyHashBoard(request.getBoard(), request.getHashBoard());
+        boolean isHashNonceCorrect = Server.verifyHashNonce(request.getNonce(), request.getHashNonce());
+        boolean isHashTimestampCorrect = Server.verifyHashTimestamp(request.getTimestamp(), request.getHashTimestamp());
+
+        if (!isHashBoardCorrect || !isHashNonceCorrect || !isHashTimestampCorrect) {
             isFinished = true;
-            return new ServerResponse(isFinished, request.getBoard(), Constants.CHEATER_FOUND);
+            return new ServerResponse(isFinished, request.getBoard(),
+                    Constants.CHEATER_FOUND + isHashBoardCorrect + isHashNonceCorrect + isHashTimestampCorrect);
         }
 
         Board board = Board.fromOneLiner(request.getBoard(), new PrintWriter(OutputStream.nullOutputStream(), true));
@@ -77,10 +82,6 @@ public class OnlineGame {
             return new ServerResponse(isFinished, board, Constants.DRAW_ANNOUNCEMENT);
         }
         return new ServerResponse(isFinished, board, "Player#1's turn");
-    }
-
-    public boolean isFinished() {
-        return isFinished;
     }
 
 }

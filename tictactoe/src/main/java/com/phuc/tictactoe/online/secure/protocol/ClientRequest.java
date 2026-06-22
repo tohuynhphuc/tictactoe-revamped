@@ -8,20 +8,29 @@ public class ClientRequest implements Protocol {
     private int move;
     private String board;
     private String hashBoard;
+    private int nonce;
+    private String hashNonce;
+    private long timestamp;
+    private String hashTimestamp;
 
     public ClientRequest() {
-
+        this(0, "", "", 0, "", 0, "");
     }
 
-    public ClientRequest(int move, String board, String hashBoard) {
+    public ClientRequest(int move, String board, String hashBoard, int nonce, String hashNonce, long timestamp,
+            String hashTimestamp) {
         this.move = move;
         this.board = board;
         this.hashBoard = hashBoard;
+        this.nonce = nonce;
+        this.hashNonce = hashNonce;
+        this.timestamp = timestamp;
+        this.hashTimestamp = hashTimestamp;
     }
 
     @Override
     public int getSize() {
-        return 3;
+        return 7;
     }
 
     @Override
@@ -32,6 +41,10 @@ public class ClientRequest implements Protocol {
         this.move = Integer.parseInt(parts[0]);
         this.board = parts[1];
         this.hashBoard = parts[2];
+        this.nonce = Integer.parseInt(parts[3]);
+        this.hashNonce = parts[4];
+        this.timestamp = Long.parseLong(parts[5]);
+        this.hashTimestamp = parts[6];
     }
 
     @Override
@@ -56,6 +69,8 @@ public class ClientRequest implements Protocol {
 
         try {
             Integer.valueOf(moveValue);
+            Integer.valueOf(parts[3]);
+            Long.valueOf(parts[5]);
         } catch (NumberFormatException e) {
             return false;
         }
@@ -70,7 +85,11 @@ public class ClientRequest implements Protocol {
         sb.append("[");
         sb.append(move).append(";");
         sb.append(board).append(";");
-        sb.append(hashBoard);
+        sb.append(hashBoard).append(";");
+        sb.append(nonce).append(";");
+        sb.append(hashNonce).append(";");
+        sb.append(timestamp).append(";");
+        sb.append(hashTimestamp);
         sb.append("]");
 
         return sb.toString();
@@ -86,6 +105,22 @@ public class ClientRequest implements Protocol {
 
     public String getHashBoard() {
         return hashBoard;
+    }
+
+    public int getNonce() {
+        return nonce;
+    }
+
+    public String getHashNonce() {
+        return hashNonce;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public String getHashTimestamp() {
+        return hashTimestamp;
     }
 
 }

@@ -15,6 +15,10 @@ public class Client {
 
     private static String currentBoard = "";
     private static String currentHashBoard = "";
+    private static int currentNonce = 0;
+    private static String currentHashNonce = "";
+    private static long currentTimestamp = 0;
+    private static String currentHashTimestamp = "";
     private static boolean isFirstConnect = true;
 
     public static void main(String[] args) {
@@ -33,12 +37,13 @@ public class Client {
         while (true) {
             String response;
             if (isFirstConnect) {
-                ClientRequest initialRequestProtocol = new ClientRequest(0, currentBoard, "");
+                ClientRequest initialRequestProtocol = new ClientRequest();
                 response = sendMessageAndReceive(initialRequestProtocol);
                 isFirstConnect = false;
             } else {
                 int playerMove = getUserMove(consoleInput);
-                ClientRequest clientRequestProtocol = new ClientRequest(playerMove, currentBoard, currentHashBoard);
+                ClientRequest clientRequestProtocol = new ClientRequest(playerMove, currentBoard, currentHashBoard,
+                        currentNonce, currentHashNonce, currentTimestamp, currentHashTimestamp);
                 response = sendMessageAndReceive(clientRequestProtocol);
             }
             if (response == null) {
@@ -52,10 +57,13 @@ public class Client {
             consoleOutput.println(serverResponse.getMessage());
             currentBoard = serverResponse.getBoard();
             currentHashBoard = serverResponse.getHashBoard();
+            currentNonce = serverResponse.getNonce();
+            currentHashNonce = serverResponse.getHashNonce();
+            currentTimestamp = serverResponse.getTimestamp();
+            currentHashTimestamp = serverResponse.getHashTimestamp();
 
             if (Board.isOneLiner(currentBoard)) {
                 Board.fromOneLiner(serverResponse.getBoard(), new PrintWriter(System.out, true)).display();
-                consoleOutput.println("Hash: " + currentHashBoard);
             } else {
                 consoleOutput.println("[Server] " + response);
             }
