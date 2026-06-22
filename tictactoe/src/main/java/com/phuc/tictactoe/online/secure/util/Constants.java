@@ -12,5 +12,9 @@ public class Constants {
     public static final String DRAW_ANNOUNCEMENT = "It is a draw!";
     public static final String GAME_END = "Game ends!";
     public static final String CHEATER_FOUND = "CHEATER! You lose.";
+    public static final String MOVE_TIMEOUT = "You took too long to play. Please start a new game.";
+
+    
+    public static final int MOVE_TIMEOUT_MILLIS = 10000;
 
 }

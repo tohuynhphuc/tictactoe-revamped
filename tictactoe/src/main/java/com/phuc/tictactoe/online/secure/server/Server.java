@@ -6,7 +6,9 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.SQLException;
 
+import com.phuc.tictactoe.online.secure.database.PlayerMoveDatabase;
 import com.phuc.tictactoe.online.secure.protocol.ClientRequest;
 import com.phuc.tictactoe.online.secure.protocol.ServerResponse;
 import com.phuc.tictactoe.online.secure.util.Constants;
@@ -22,39 +24,45 @@ public class Server {
 
     public static void main(String[] args) {
         try {
+            PlayerMoveDatabase database = new PlayerMoveDatabase();
             serverSocket = new ServerSocket(Constants.SOCKET_PORT);
-        } catch (IOException e) {
-            System.err.println("Failed to Start Server Socket. Program Exiting.");
-            System.err.println("Error Message: " + e.getMessage());
-            return;
-        }
 
-        System.out.println("Server started on localhost:" + Constants.SOCKET_PORT);
+            System.out.println("Database is ready.\nServer started on localhost:" + Constants.SOCKET_PORT);
 
-        while (true) {
-            try {
-                Socket clientSocket = serverSocket.accept();
-                acceptClient(clientSocket);
-            } catch (IOException e) {
-                System.err.println("Failed to Connect to Client. Program Exiting.");
-                System.err.println("Error Message: " + e.getMessage());
-                return;
+            while (true) {
+                try {
+                    Socket clientSocket = serverSocket.accept();
+                    acceptClient(clientSocket, database);
+                } catch (IOException e) {
+                    System.err.println("Failed to Connect to Client. Program Exiting.");
+                    System.err.println("Error Message: " + e.getMessage());
+                    return;
+                }
             }
+        } catch (IOException e) {
+            System.err.println("Failed to Wotk with Server Socket. Program Exiting.");
+            System.err.println("Error Message: " + e.getMessage());
+        } catch (SQLException e) {
+            System.err.println("Failed to Work with Database. Program Exiting.");
+            System.err.println("Error Message: " + e.getMessage());
         }
     }
 
-    private static void acceptClient(Socket clientSocket) throws IOException {
+    private static void acceptClient(Socket clientSocket, PlayerMoveDatabase database)
+            throws IOException, SQLException {
         BufferedReader input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         PrintWriter output = new PrintWriter(clientSocket.getOutputStream(), true);
-        handleClient(input, output);
+        handleClient(input, output, database);
     }
 
-    private static void handleClient(BufferedReader input, PrintWriter output) throws IOException {
+    private static void handleClient(BufferedReader input, PrintWriter output, PlayerMoveDatabase database)
+            throws IOException, SQLException {
         OnlineGame game = new OnlineGame();
 
         ClientRequest clientRequest = new ClientRequest();
         clientRequest.decode(input.readLine());
-        ServerResponse response = game.processRequest(clientRequest);
+
+        ServerResponse response = game.processRequest(clientRequest, database);
         output.println(response);
     }
 

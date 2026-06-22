@@ -2,8 +2,10 @@ package com.phuc.tictactoe.online.secure.server;
 
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 
 import com.phuc.tictactoe.online.secure.board.Board;
+import com.phuc.tictactoe.online.secure.database.PlayerMoveDatabase;
 import com.phuc.tictactoe.online.secure.protocol.ClientRequest;
 import com.phuc.tictactoe.online.secure.protocol.ServerResponse;
 import com.phuc.tictactoe.online.secure.server.player.Computer;
@@ -17,12 +19,13 @@ public class OnlineGame {
     private final Computer computer;
     private boolean isFinished;
 
+
     public OnlineGame() {
         this.computer = new Computer("2");
         this.isFinished = false;
     }
 
-    public ServerResponse processRequest(ClientRequest request) {
+    public ServerResponse processRequest(ClientRequest request, PlayerMoveDatabase database) throws SQLException {
         int clientMove = request.getMove();
 
         if (clientMove == 0) {
@@ -47,9 +50,20 @@ public class OnlineGame {
 
         if (!isHashBoardCorrect || !isHashNonceCorrect || !isHashTimestampCorrect) {
             isFinished = true;
-            return new ServerResponse(isFinished, request.getBoard(),
-                    Constants.CHEATER_FOUND + isHashBoardCorrect + isHashNonceCorrect + isHashTimestampCorrect);
+            return new ServerResponse(isFinished, request.getBoard(), Constants.CHEATER_FOUND);
         }
+
+        if (database.containsNonce(request.getNonce())) {
+            isFinished = true;
+            return new ServerResponse(isFinished, request.getBoard(), Constants.CHEATER_FOUND);
+        }
+
+        if (System.currentTimeMillis() - request.getTimestamp() > Constants.MOVE_TIMEOUT_MILLIS) {
+            isFinished = true;
+            return new ServerResponse(isFinished, request.getBoard(), Constants.MOVE_TIMEOUT);
+        }
+
+        database.insert(request.getNonce(), request.getTimestamp());
 
         Board board = Board.fromOneLiner(request.getBoard(), new PrintWriter(OutputStream.nullOutputStream(), true));
 

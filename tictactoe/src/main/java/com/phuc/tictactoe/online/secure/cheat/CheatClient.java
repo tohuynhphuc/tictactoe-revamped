@@ -35,7 +35,8 @@ public class CheatClient {
             String manualBoard = getManualBoard(consoleInput, consoleOutput);
             String manualHashBoard = getManualHashBoard(consoleInput, consoleOutput);
 
-            ClientRequest clientRequestProtocol = new ClientRequest(manualMove, manualBoard, manualHashBoard);
+            ClientRequest clientRequestProtocol = new ClientRequest(manualMove, manualBoard, manualHashBoard, 0, "", 0,
+                    "");
 
             String response = sendMessageAndReceive(clientRequestProtocol);
             if (response == null) {

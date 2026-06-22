@@ -4,7 +4,7 @@ import com.phuc.tictactoe.online.secure.board.Board;
 
 public class ClientRequest implements Protocol {
 
-    /** Move 1-9, -1 = quit, -2 = invalid */
+    /** Move 1-9, -1 = quit, -2 = invalid, 0 = new */
     private int move;
     private String board;
     private String hashBoard;
