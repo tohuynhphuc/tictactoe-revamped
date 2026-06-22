@@ -68,7 +68,16 @@ public class Server {
 
     private static void handleRequest(HttpExchange exchange, PlayerMoveDatabase database)
             throws IOException, SQLException {
+        exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
+        exchange.getResponseHeaders().add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+        exchange.getResponseHeaders().add("Access-Control-Allow-Headers", "Content-Type, Authorization");
+
         try (exchange) {
+            if ("OPTIONS".equalsIgnoreCase(exchange.getRequestMethod())) {
+                exchange.sendResponseHeaders(204, -1);
+                return;
+            }
+
             if (!exchange.getRequestMethod().equalsIgnoreCase("POST")) {
                 exchange.getResponseHeaders().set("Allow", "POST");
                 sendResponse(exchange, 405, "Method not allowed. Only POST.");
