@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Tic Tac Toe</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <main>
+        <h1>Tic Tac Toe</h1>
+
+        <p id="message">Press New Game to start.</p>
+
+        <table id="board">
+            <tr>
+                <td><button class="cell" data-move="1" disabled>1</button></td>
+                <td><button class="cell" data-move="2" disabled>2</button></td>
+                <td><button class="cell" data-move="3" disabled>3</button></td>
+            </tr>
+
+            <tr>
+                <td><button class="cell" data-move="4" disabled>4</button></td>
+                <td><button class="cell" data-move="5" disabled>5</button></td>
+                <td><button class="cell" data-move="6" disabled>6</button></td>
+            </tr>
+
+            <tr>
+                <td><button class="cell" data-move="7" disabled>7</button></td>
+                <td><button class="cell" data-move="8" disabled>8</button></td>
+                <td><button class="cell" data-move="9" disabled>9</button></td>
+            </tr>
+        </table>
+
+        <button id="new-game-button">New Game</button>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

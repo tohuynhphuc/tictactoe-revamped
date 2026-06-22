@@ -10,8 +10,8 @@
 
     <groupId>com.phuc</groupId>
     <artifactId>tictactoe</artifactId>
-    <version>0.9</version>
-    <packaging>jar</packaging>
+    <version>0.10</version>
+    <packaging>war</packaging>
 
     <name>tictactoe</name>
     <url>http://www.example.com</url>
@@ -47,9 +47,17 @@
         </dependency>
 
         <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <version>6.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <version>2.4.240</version>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
 
@@ -94,7 +102,7 @@
                                 <manifest>
                                     <addClasspath>true</addClasspath>
                                     <mainClass>
-                                        com.phuc.tictactoe.http.client.Client
+                                        com.phuc.tictactoe.servlet.client.Client
                                     </mainClass>
                                 </manifest>
                             </archive>
@@ -114,7 +122,7 @@
                                 <manifest>
                                     <addClasspath>true</addClasspath>
                                     <mainClass>
-                                        com.phuc.tictactoe.http.server.Server
+                                        com.phuc.tictactoe.servlet.server.Server
                                     </mainClass>
                                 </manifest>
                             </archive>
@@ -132,7 +140,7 @@
 
                 <!-- Keep normal mvn exec:java running the old basic App (now also in online.sust) -->
                 <configuration>
-                    <mainClass>com.phuc.tictactoe.http.App</mainClass>
+                    <mainClass>com.phuc.tictactoe.servlet.App</mainClass>
                 </configuration>
 
                 <executions>
@@ -147,7 +155,7 @@
 
                         <configuration>
                             <mainClass>
-                                com.phuc.tictactoe.http.client.Client
+                                com.phuc.tictactoe.servlet.client.Client
                             </mainClass>
                         </configuration>
                     </execution>
@@ -162,7 +170,7 @@
 
                         <configuration>
                             <mainClass>
-                                com.phuc.tictactoe.http.server.Server
+                                com.phuc.tictactoe.servlet.server.Server
                             </mainClass>
                         </configuration>
                     </execution>
